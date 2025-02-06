@@ -1,7 +1,7 @@
 ---
-title: "Connecting SOC with RL -- Importance sampling"
-subtitle: "AI as a tool in Mathematics"
-footer: "AI for math"
+title: "Connecting Stochastic Optimal Control with RL -- Importance sampling"
+subtitle: "Special Seminar in Stochastics"
+footer: "Connecting SOC with RL"
 author: "Alonso Cisneros"
 institute: Freie Universität Berlin
 format:
@@ -30,26 +30,17 @@ nocite: |
   @*
 ---
 
-#
+## {.center}
+
+![](img/medallion_JoMP.svg){width="80%"}
+
+##
 
 ![](img/diagram1.svg)
-
-:::{.notes}
-What optimization models have we seen in the seminar so far?
-:::
 
 -----
 
 ![](img/diagram3.svg)
-
-:::{.notes}
-- So far we've seen RL as a fancy tool to explore complicated spaces. Today, we're going
-to think of how the discipline of RL as a whole introduces new ideas to other areas of
-mathematics and creates new fertile ground.
-
-- Instead of finding ways of computing faster, we're looking for avenues to come up with entirely new ways of posing problems that allow us to use all of the work that was already invested in "AI"
-:::
-
 
 
 # Outline
@@ -105,28 +96,20 @@ not, we carry out the accounting of how much rent is, and let the player know ho
 won/lost and to what square this is connected.
 :::
 
-## Can you describe the state space? {.center}
+## Can you describe the state space?
 
-. . . 
+::: {.panel-tabset}
 
-::: {.r-fit-text}
-How does it _look_ like?
+### Transitions from start
+![](img/transicion.svg){width="80%"}
+
+### Transition probabilities
+![](img/transicion-markov.svg){width="80%"}
 :::
 
-## {.center}
-
-It's hard to describe the state space, but we can study the dynamics
-
-. . .
-
-::: {.r-stack}
-:::{.fragment .fade-out}
-![](img/transicion.svg){.r-stretch}
-:::
-
-:::{.fragment}
-![](img/transicion-markov.svg){.r-stretch}
-:::
+:::{.notes}
+In this example we have full access to the dynamics of the problem. This is not always
+the case
 :::
 
 -----
@@ -143,12 +126,12 @@ It's hard to describe the state space, but we can study the dynamics
 
 . . .
 
-## 5 minutes to think
+## 2 minutes to think
 
 - What is a reasonable way of guessing transition probabilities?
 - Can I be sure to observe even improbable but still possible states?
 
-:::{.fragment}
+:::{.fragment .nonincremental}
 The right answers are:
 
 - By simulating the transitions and get empirical estimates
@@ -166,11 +149,13 @@ The right answers are:
 - We register what it gained or lost by buying or not buying a square by the end of the
   game.
 
-::: {.fragment .center}
-![](img/hist-miniopoly.svg)
-:::
+## {.center}
+
+![](img/hist-miniopoly.svg){width="80%"}
 
 :::{.notes}
+Do the blackboard argument
+
 - Graph:
   - This is a violin plot. It shows the estimated probability densities of observing...
   - The x axis shows the different squares
@@ -288,10 +273,11 @@ But...
 -----
 
 The new, controlled dynamics are now described as
-\begin{equation}
+\begin{align*}
 \label{eq: controlled langevin sde}
-\mathrm dX_s^u = (-\nabla V(X_s^u) + \sigma(X_s^u)  \,  u(X_s^u))\mathrm ds + \sigma(X_s^u) \mathrm dW_s, \qquad X_0^u = x 
-\end{equation}
+\mathrm dX_s^u &= (-\nabla V(X_s^u) + \sigma(X_s^u)  \,  u(X_s^u))\mathrm ds + \sigma(X_s^u) \mathrm dW_s, \\
+X_0^u &= x 
+\end{align*}
 
 . . .
 
@@ -334,6 +320,9 @@ $u^*$
   - The potential $u$ is an Itô integrable function satisfying a linear growth condition
 - Note that $\tau$ is a.s. finite
 - Where $\mathcal{W}$ serving as a measure of "work" over a trajectory
+$$
+  \mathcal{W} := \int_{0}^{\tau} f(X_s) \, \mathrm{d}s + g(X_{\tau})
+$$
 :::
 
 ## Connection to optimization
@@ -367,12 +356,14 @@ The optimal bias achieves zero variance:
 
 # Optimal biasing through RL
 
+## {.center}
+
 ![](img/diagram_complete.svg)
 
 ------
 
-- Let's reconsider the SOC problem (excuse the change in notation)
-<!-- - We discretize with Euler--Maruyama -->
+- Let's reconsider the SOC problem
+- We need to transition from continuous time to discrete time
 - We discretize the dynamics equation
 \begin{align*}
 s_{t+1} &= s_t + \left( -\nabla V(s_t)  + \sigma u(s_t)\right) \Delta t + \sigma \, \sqrt{\Delta t} \, \eta_{t+1} \\
@@ -430,8 +421,5 @@ at each time step but the choice of the running cost f and the final cost g can 
 this statement.
 :::
 
------
-
-![](img/diagram_complete.svg)
 
 # References
